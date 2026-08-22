@@ -46,7 +46,7 @@ textarea{min-height:74px;resize:vertical}
 .btn.primary{background:var(--vino);color:#fff}
 .btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
 .btn.mini{width:auto;display:inline-block;padding:9px 14px;font-size:13.5px;margin:6px 6px 0 0}
-.btn.danger{background:#fdecea;color:var(--no);border:1.5px solid #f2c2bd}
+.btn.danger{background:var(--no);color:#fff;border:none}
 .btn:disabled{opacity:.45}
 nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);
   display:flex;z-index:60}
@@ -93,6 +93,18 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
 .estado .falta{color:var(--no)}
 .hr{border:none;border-top:1px solid var(--line);margin:12px 0}
 .leg{background:var(--crema);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--vino-osc);line-height:1.5}
+.itab .t{position:relative}
+.bdg{position:absolute;top:-6px;right:-6px;background:var(--no);color:#fff;border-radius:999px;
+  font-size:10.5px;font-weight:800;min-width:17px;height:17px;line-height:17px;text-align:center;
+  padding:0 4px;display:none;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.bdg.show{display:block}
+.zona-peligro{border-top:1.5px dashed var(--line);margin-top:26px;padding-top:12px}
+.zona-peligro .peq{font-size:11.5px;color:var(--muted);margin:0}
+.modal{position:fixed;inset:0;background:rgba(30,8,12,.45);display:none;align-items:center;justify-content:center;z-index:120;padding:20px}
+.modal.show{display:flex}
+.modal .caja{background:#fff;border-radius:14px;padding:18px;max-width:420px;width:100%;box-shadow:0 8px 30px rgba(30,8,12,.35)}
+.modal .caja h3{margin:0 0 8px;font-size:15px;color:var(--vino);font-family:Arial}
+.modal .caja p{font-size:13.5px;color:var(--muted);margin:0 0 12px;line-height:1.45}
 </style>
 </head>
 <body>
@@ -153,13 +165,14 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
       <div class="exp" style="border:none;padding:0;margin:0;cursor:default"><span class="id" id="f-id">—</span><span id="f-pr"></span></div>
       <button class="btn mini ghost" id="btn-volver" style="margin:0">‹ Listado</button>
     </div>
+    <div class="small" id="f-meta" style="margin-top:2px"></div>
     <div class="itab" id="itabs">
-      <div class="t on" data-b="A">A·Expediente</div>
-      <div class="t" data-b="B">B·Personas</div>
-      <div class="t" data-b="C">C·Hecho</div>
-      <div class="t" data-b="D">D·Trayectoria</div>
-      <div class="t" data-b="E">E·Empleador</div>
-      <div class="t" data-b="F">F·Cierre</div>
+      <div class="t on" data-b="A">A·Expediente<span class="bdg"></span></div>
+      <div class="t" data-b="B">B·Personas<span class="bdg"></span></div>
+      <div class="t" data-b="C">C·Hecho<span class="bdg"></span></div>
+      <div class="t" data-b="D">D·Trayectoria<span class="bdg"></span></div>
+      <div class="t" data-b="E">E·Empleador<span class="bdg"></span></div>
+      <div class="t" data-b="F">F·Cierre<span class="bdg"></span></div>
     </div>
 
     <div class="bloque" id="blq-A">
@@ -170,6 +183,7 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
       <input type="date" id="a-fp">
       <label class="fld">Vía de ingreso <span class="req">*</span></label>
       <div class="chips" data-single="a-via"><div class="chip">Comparecencia espontánea</div><div class="chip">Escrito/nota</div><div class="chip">Remisión de otro organismo</div><div class="chip">Otra</div></div>
+      <input type="text" id="a-viao" placeholder="Especifique la vía de ingreso" style="display:none;margin-top:6px" autocomplete="off">
       <label class="fld">Asistencia sindical <span class="req">*</span></label>
       <div class="chips" data-single="a-sind"><div class="chip">Sí</div><div class="chip">No</div><div class="chip">Sin dato</div></div>
       <label class="fld">Ámbito institucional <span class="req">*</span></label>
@@ -185,6 +199,7 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
       <select id="a-den"><option value=""></option><option>Sí, del presentante</option><option>Sí, de la persona señalada</option><option>Sí, de ambas</option><option>No</option><option>Sin dato</option></select>
       <label class="fld">Actuaciones paralelas</label>
       <div class="chips" data-multi="a-act"><div class="chip" data-v="a">Judicial</div><div class="chip" data-v="b">Sumario/disciplinaria del empleador</div><div class="chip" data-v="c">Policial</div><div class="chip" data-v="d">Otra</div><div class="chip" data-v="e">Ninguna</div></div>
+      <input type="text" id="a-acto" placeholder="Especifique la actuación «Otra»" style="display:none;margin-top:6px" autocomplete="off">
       <label class="fld">Afectación de terceros no trabajadores</label>
       <div class="chips" data-single="a-ter"><div class="chip">Sí</div><div class="chip">No</div></div>
     </div>
@@ -227,6 +242,7 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
     <div class="bloque" id="blq-E" style="display:none">
       <label class="fld">Tipo de empleador <span class="req">*</span></label>
       <div class="chips" data-single="e-tipo"><div class="chip">Organismo público</div><div class="chip">Empresa privada</div><div class="chip">Otro</div></div>
+      <input type="text" id="e-tipoo" placeholder="Especifique el tipo de empleador (ONG, iglesia, consorcio, casa particular…)" style="display:none;margin-top:6px" autocomplete="off">
       <div id="e-pub" style="display:none">
         <label class="fld">Organismo (buscar en catálogo D-09) <span class="req">*</span></label>
         <input type="text" id="e-orgq" placeholder="Escriba: CGE, hospital, municipalidad…" autocomplete="off">
@@ -269,8 +285,12 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
     </div>
 
     <div class="estado" id="f-estado"></div>
-    <button class="btn primary" id="btn-guardar">Guardar reclamo</button>
-    <button class="btn danger" id="btn-borrar1">Eliminar este reclamo</button>
+    <button class="btn primary" id="btn-guardar">💾 Guardar reclamo</button>
+    <button class="btn ghost" id="btn-lista2">Volver al listado</button>
+    <div class="zona-peligro">
+      <p class="peq">Acción definitiva — pide confirmación antes de borrar</p>
+      <button class="btn danger" id="btn-borrar1">🗑 Eliminar este reclamo</button>
+    </div>
   </div>
 </section>
 
@@ -310,6 +330,15 @@ nav .ico{display:block;font-size:20px;margin-bottom:2px}
   <button id="nav-lista" class="on"><span class="ico">▤</span>Reclamos</button>
   <button id="nav-datos"><span class="ico">⇩</span>Datos</button>
 </nav>
+<div class="modal" id="modal-salir">
+  <div class="caja">
+    <h3>Cambios sin guardar</h3>
+    <p>Este reclamo tiene modificaciones que todavía no se guardaron. ¿Qué desea hacer?</p>
+    <button class="btn primary" id="m-guardar">💾 Guardar y continuar</button>
+    <button class="btn ghost" id="m-volver">Volver al formulario</button>
+    <button class="btn ghost" id="m-salir" style="color:var(--no)">Salir sin guardar</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
 var DEPTOS=["Apóstoles","Cainguás","Candelaria","Capital","Concepción","Eldorado","General Manuel Belgrano","Guaraní","Iguazú","Leandro N. Alem","Libertador General San Martín","Montecarlo","Oberá","San Ignacio","San Javier","San Pedro","25 de Mayo"];
@@ -362,13 +391,13 @@ function joinL(keys,LAB){ return (keys||[]).map(function(k){return k+' '+LAB[k];
 function rowExp(e){
   var pid=parseId(e.id)||{deleg:''}; var d=derivar(e); var ci=caesInfo(e.e.caes);
   var tv=e.c.tv||[];
-  var r=[e.id,pid.deleg,e.a.fp,e.a.via,d.car,d.vict,d.sen,e.a.sind,e.a.amb,
+  var r=[e.id,pid.deleg,e.a.fp,(e.a.via==='Otra'&&e.a.viao?'Otra — '+e.a.viao:e.a.via),d.car,d.vict,d.sen,e.a.sind,e.a.amb,
     ci?ci.sector:'',e.a.loc,e.a.vinc,e.a.den,
-    (e.a.act||'').split('|').filter(Boolean).map(function(k){return k+' '+ACT_LAB[k];}).join('; '),
+    (e.a.act||'').split('|').filter(Boolean).map(function(k){var t=k+' '+ACT_LAB[k];if(k==='d'&&e.a.acto)t+=' — '+e.a.acto;return t;}).join('; '),
     e.a.ter,e.c.fh,e.c.fr];
   TVKEYS.forEach(function(k){ r.push(tv.indexOf(k)>=0?'Sí':'No'); });
   r=r.concat([joinL(e.c.mod,MOD_LAB),joinL(e.c.ctx,CTX_LAB),e.c.sen,
-    e.e.tipo,e.e.jur,e.e.nat,e.e.org,e.e.omun,ci?ci.label:'',
+    (e.e.tipo==='Otro'&&e.e.tipoo?'Otro — '+e.e.tipoo:e.e.tipo),e.e.jur,e.e.nat,e.e.org,e.e.omun,ci?ci.label:'',
     e.e.comp,e.e.resp,e.f.cla,(e.f.rec||[]).join(', '),e.f.nres,e.f.fres,e.c.obs]);
   return r;
 }
@@ -392,7 +421,7 @@ var REQ={
  A:function(e){var f=[];var pid=parseId(e.id);if(!pid)f.push('n.º de expediente válido');
    if(!e.a.fp)f.push('fecha de presentación');if(!e.a.via)f.push('vía de ingreso');
    if(!e.a.sind)f.push('asistencia sindical');if(!e.a.amb)f.push('ámbito');
-   if(!e.a.loc)f.push('localidad del establecimiento');return f;},
+   if(!e.a.loc)f.push('localidad del establecimiento');if(e.a.via==='Otra'&&!e.a.viao)f.push('detalle de la vía «Otra»');if((e.a.act||'').indexOf('d')>=0&&!e.a.acto)f.push('detalle de la actuación «Otra»');return f;},
  B:function(e){var f=[];var d=derivar(e);if(d.vict<1)f.push('al menos una persona afectada');
    if(d.sen<1)f.push('al menos una persona señalada');
    e.p.forEach(function(p){if(!p.gen)f.push('identidad de género de '+p.pid);if(!p.niv)f.push('nivel jerárquico de '+p.pid);});return f;},
@@ -403,7 +432,7 @@ var REQ={
  D:function(e){var f=[];if(!e.h.length)f.push('al menos el hito 01');
    var t01=false;e.h.forEach(function(h){if(h[0]==='01')t01=true;if(!h[1])f.push('fecha del hito '+h[0]);});
    if(e.h.length&&!t01)f.push('hito 01 (presentación)');return f;},
- E:function(e){var f=[];if(!e.e.tipo)f.push('tipo de empleador');
+ E:function(e){var f=[];if(!e.e.tipo)f.push('tipo de empleador');if(e.e.tipo==='Otro'&&!e.e.tipoo)f.push('detalle del tipo de empleador «Otro»');
    if(e.e.tipo==='Organismo público'){if(!e.e.org)f.push('organismo (D-09)');
      if(e.e.jur==='Municipal'&&!e.e.omun)f.push('municipio del organismo');}
    if(!e.e.caes)f.push('rama CAES');if(!e.e.comp)f.push('comparecencia del empleador');
@@ -414,13 +443,21 @@ var REQ={
 };
 function estado(e){ var out={},k; for(k in REQ) out[k]=REQ[k](e); return out; }
 function nuevoExp(){ return {id:'',pr:0,
-  a:{fp:'',via:'',sind:'',amb:'',loc:'',dep:'',vinc:'',den:'',act:'',ter:''},
+  a:{fp:'',via:'',viao:'',sind:'',amb:'',loc:'',dep:'',vinc:'',den:'',act:'',acto:'',ter:''},
   c:{fh:'',fr:'',tv:[],mod:[],ctx:[],sen:'',obs:''},
-  e:{tipo:'',jur:'',nat:'',org:'',omun:'',caes:'',comp:'',resp:'',fr:''},
+  e:{tipo:'',tipoo:'',jur:'',nat:'',org:'',omun:'',caes:'',comp:'',resp:'',fr:''},
   f:{cla:'',rec:[],fres:'',nres:''}, p:[], h:[], meta:{cr:'',cop:'',mod:'',mop:''}}; }
 var PATRON={"E": "﻿\"id_expediente\";\"delegacion\";\"fecha_presentacion\";\"via_ingreso\";\"caracter\";\"cant_victimas\";\"cant_senaladas\";\"sindicato\";\"ambito\";\"sector_actividad\";\"loc_establecimiento\";\"exp_vinculado\";\"denuncia_policial\";\"actuaciones_paralelas\";\"afectacion_terceros\";\"fecha_hecho\";\"frecuencia\";\"TV: física\";\"TV: psicológica\";\"TV: sexual\";\"TV: digital\";\"TV: económica\";\"TV: simbólica\";\"modalidad\";\"contexto_c190\";\"sentido\";\"empleador_tipo\";\"op_jurisdiccion\";\"op_naturaleza\";\"op_organismo\";\"op_municipio\";\"rama_caes\";\"empleador_comparecio\";\"empleador_respondio\";\"forma_clausura\";\"recomendaciones\";\"nro_resolucion\";\"fecha_resolucion\";\"observaciones\"\r\n\"4700-9001/2024\";\"Sede central Posadas\";\"11/03/2024\";\"Comparecencia espontánea\";\"Individual\";\"1\";\"1\";\"No\";\"Privado\";\"Comercio\";\"Oberá\";\"\";\"No\";\"e Ninguna\";\"No\";\"12/02/2024\";\"Frecuente\";\"No\";\"Sí\";\"No\";\"No\";\"Sí\";\"No\";\"c Ámbito laboral\";\"a Lugar de trabajo\";\"Descendente\";\"Empresa privada\";\"\";\"\";\"\";\"\";\"G.48 — Comercio, excepto de vehículos automotores y motocicletas\";\"Sí, por apoderado/a\";\"Parcial\";\"Instrumento legal con informe técnico\";\"a, b\";\"901/24\";\"10/12/2024\";\"Caso ficticio de prueba del módulo.\"\r\n\"4700-9002/2024\";\"Sede central Posadas\";\"05/08/2024\";\"Escrito/nota\";\"Individual\";\"1\";\"1\";\"Sí\";\"Público\";\"Administración pública\";\"Eldorado\";\"\";\"Sí, del presentante\";\"b Sumario/disciplinaria del empleador\";\"No\";\"07/2024\";\"Continuo\";\"No\";\"Sí\";\"No\";\"No\";\"No\";\"No\";\"c Ámbito laboral\";\"a Lugar de trabajo; d Comunicaciones laborales (TIC)\";\"Descendente\";\"Organismo público\";\"Municipal\";\"Poder Ejecutivo (adm. central)\";\"Municipalidad (indicar municipio)\";\"Eldorado\";\"O.84 — Administración pública y defensa; planes de seguro social obligatorio\";\"Sí, por sí\";\"Sí\";\"Instrumento legal con informe técnico\";\"a, c, d\";\"902/25\";\"22/04/2025\";\"Caso ficticio de prueba del módulo.\"\r\n\"4700-9003/2025\";\"Sede central Posadas\";\"14/03/2025\";\"Comparecencia espontánea\";\"Colectivo\";\"2\";\"1\";\"No\";\"Público\";\"Salud\";\"Posadas\";\"\";\"No\";\"e Ninguna\";\"No\";\"01/2025\";\"Frecuente\";\"No\";\"Sí\";\"No\";\"Sí\";\"No\";\"Sí\";\"c Ámbito laboral\";\"a Lugar de trabajo; d Comunicaciones laborales (TIC)\";\"Descendente\";\"Organismo público\";\"Provincial\";\"Empresa o sociedad del Estado\";\"Parque de la Salud «Dr. Ramón Madariaga» S.E.\";\"\";\"Q.86 — Actividades de atención a la salud humana\";\"Sí, por apoderado/a\";\"No\";\"Instrumento legal con informe técnico\";\"a, b, e\";\"903/25\";\"18/11/2025\";\"Caso ficticio de prueba; reclamo colectivo.\"", "P": "﻿\"id_expediente\";\"id_persona\";\"rol\";\"identidad_genero\";\"puesto\";\"nivel_jerarquico\";\"nota\"\r\n\"4700-9001/2024\";\"V1\";\"Persona afectada / presentante\";\"Mujer\";\"Cajera\";\"Sin personal a cargo\";\"\"\r\n\"4700-9001/2024\";\"S1\";\"Persona señalada\";\"Varón\";\"Encargado de sucursal\";\"Mando medio\";\"\"\r\n\"4700-9002/2024\";\"V1\";\"Persona afectada / presentante\";\"Varón\";\"Administrativo\";\"Sin personal a cargo\";\"\"\r\n\"4700-9002/2024\";\"S1\";\"Persona señalada\";\"Mujer\";\"Directora de área\";\"Conducción/dirección\";\"\"\r\n\"4700-9003/2025\";\"V1\";\"Persona afectada / presentante\";\"Mujer\";\"Enfermera\";\"Sin personal a cargo\";\"\"\r\n\"4700-9003/2025\";\"V2\";\"Persona afectada no presentante\";\"Mujer trans\";\"Técnica de laboratorio\";\"Sin personal a cargo\";\"\"\r\n\"4700-9003/2025\";\"S1\";\"Persona señalada\";\"Varón\";\"Jefe de servicio\";\"Mando medio\";\"\"", "T": "﻿\"id_expediente\";\"hito (cód.)\";\"hito\";\"fecha\";\"nota\"\r\n\"4700-9001/2024\";\"01\";\"Presentación del reclamo\";\"11/03/2024\";\"\"\r\n\"4700-9001/2024\";\"02\";\"Notificación al empleador\";\"19/03/2024\";\"\"\r\n\"4700-9001/2024\";\"03\";\"Audiencia con persona señalada\";\"09/04/2024\";\"\"\r\n\"4700-9001/2024\";\"04\";\"Descargo de la persona señalada\";\"16/04/2024\";\"\"\r\n\"4700-9001/2024\";\"05\";\"Audiencia con el empleador\";\"02/05/2024\";\"\"\r\n\"4700-9001/2024\";\"08\";\"Informe técnico\";\"20/09/2024\";\"\"\r\n\"4700-9001/2024\";\"10\";\"Resolución de cierre\";\"10/12/2024\";\"Resolución 901/24.\"\r\n\"4700-9002/2024\";\"01\";\"Presentación del reclamo\";\"05/08/2024\";\"\"\r\n\"4700-9002/2024\";\"02\";\"Notificación al empleador\";\"13/08/2024\";\"\"\r\n\"4700-9002/2024\";\"03\";\"Audiencia con persona señalada\";\"03/09/2024\";\"\"\r\n\"4700-9002/2024\";\"04\";\"Descargo de la persona señalada\";\"10/09/2024\";\"\"\r\n\"4700-9002/2024\";\"05\";\"Audiencia con el empleador\";\"24/09/2024\";\"\"\r\n\"4700-9002/2024\";\"06\";\"Intimación al empleador\";\"28/11/2024\";\"\"\r\n\"4700-9002/2024\";\"10\";\"Resolución de cierre\";\"22/04/2025\";\"Resolución 902/25.\"\r\n\"4700-9002/2024\";\"11\";\"Notificación final a las partes\";\"29/04/2025\";\"\"\r\n\"4700-9003/2025\";\"01\";\"Presentación del reclamo\";\"14/03/2025\";\"\"\r\n\"4700-9003/2025\";\"02\";\"Notificación al empleador\";\"21/03/2025\";\"\"\r\n\"4700-9003/2025\";\"03\";\"Audiencia con persona señalada\";\"10/04/2025\";\"\"\r\n\"4700-9003/2025\";\"04\";\"Descargo de la persona señalada\";\"24/04/2025\";\"\"\r\n\"4700-9003/2025\";\"05\";\"Audiencia con el empleador\";\"08/05/2025\";\"\"\r\n\"4700-9003/2025\";\"06\";\"Intimación al empleador\";\"30/06/2025\";\"\"\r\n\"4700-9003/2025\";\"07\";\"Pase a etapa evaluativa\";\"28/07/2025\";\"\"\r\n\"4700-9003/2025\";\"08\";\"Informe técnico\";\"15/09/2025\";\"\"\r\n\"4700-9003/2025\";\"10\";\"Resolución de cierre\";\"18/11/2025\";\"Resolución 903/25.\""};
 /* ====== ESTADO Y PERSISTENCIA ====== */
-var mem={cfg:null,exps:[]}, canStore=true, cur=null, curNew=false;
+var mem={cfg:null,exps:[]}, canStore=true, cur=null, curNew=false, base='', pendExit=null;
+var TABNOM={A:'A · Expediente',B:'B · Personas',C:'C · Hecho',D:'D · Trayectoria',E:'E · Empleador',F:'F · Cierre'};
+function snap(){return JSON.stringify({id:cur.id,a:cur.a,c:cur.c,e:cur.e,f:cur.f,p:cur.p,h:cur.h});}
+function fmtTs(iso){if(!iso)return '';var d=new Date(iso),p=function(n){return (n<10?'0':'')+n;};
+  return p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2)+' '+p(d.getHours())+':'+p(d.getMinutes());}
+function pintarMeta(){var m=cur&&cur.meta;var t='';
+  if(m&&m.cr)t='Alta: '+(m.cop||'—')+' · '+fmtTs(m.cr)+(m.mod&&m.mod!==m.cr?('  |  Última edición: '+(m.mop||'—')+' · '+fmtTs(m.mod)):'');
+  else t='Reclamo nuevo — todavía sin guardar · Operador/a '+((mem.cfg&&mem.cfg.op)||'');
+  $('#f-meta').textContent=t;}
 try{localStorage.setItem('__t','1');localStorage.removeItem('__t');}catch(e){canStore=false;}
 function load(){ if(!canStore)return; try{
   var c=localStorage.getItem('vl_cfg'); if(c)mem.cfg=JSON.parse(c);
@@ -441,8 +478,16 @@ function show(id){ $all('.screen').forEach(function(s){s.classList.remove('on');
   $('#nav-lista').classList.toggle('on', id==='scr-lista'||id==='scr-ficha');
   $('#nav-datos').classList.toggle('on', id==='scr-datos'); window.scrollTo(0,0); }
 function needCfg(){ if(mem.cfg) return false; toast('Completá primero los datos de carga'); show('scr-config'); return true; }
-$('#nav-lista').onclick=function(){ if(needCfg())return; renderLista(); show('scr-lista'); };
-$('#nav-datos').onclick=function(){ if(needCfg())return; renderDatos(); show('scr-datos'); };
+function irLista(){ renderLista(); show('scr-lista'); }
+function irDatos(){ renderDatos(); show('scr-datos'); }
+function intentarSalir(destino){
+  if(!$('#scr-ficha').classList.contains('on')){ destino(); return; }
+  collect();
+  if(snap()===base){ destino(); return; }
+  pendExit=destino; $('#modal-salir').classList.add('show');
+}
+$('#nav-lista').onclick=function(){ if(needCfg())return; intentarSalir(irLista); };
+$('#nav-datos').onclick=function(){ if(needCfg())return; intentarSalir(irDatos); };
 
 /* ====== CHIPS ====== */
 document.addEventListener('click',function(ev){
@@ -465,7 +510,7 @@ function renderCfg(){
   var s=$('#cfg-del'); s.innerHTML='';
   Object.keys(D01).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k+' — '+D01[k];s.appendChild(o);});
   if(mem.cfg){ $('#cfg-op').value=mem.cfg.op||''; $('#cfg-eq').value=mem.cfg.eq||''; $('#cfg-sec').checked=!!mem.cfg.sec; if(mem.cfg.del)s.value=mem.cfg.del; }
-  $('#verline').textContent='Aplicación vl-v1 · Diccionario v2.1 · Catálogos 14/08/2026';
+  $('#verline').textContent='Aplicación vl-v2 · Diccionario v2.1 · Catálogos 14/08/2026';
   $('#btn-prueba').textContent = hayPrueba()? 'Quitar casos de prueba':'Cargar casos de prueba';
   diag('#diag');
 }
@@ -474,7 +519,7 @@ $('#btn-cfg-save').onclick=function(){
   if(!op||!eq){toast('Faltan operador/a y equipo');return;}
   if(!$('#cfg-sec').checked){toast('Confirmá la declaración de secreto estadístico');return;}
   var pre = mem.cfg||{};
-  mem.cfg={op:op,eq:eq,del:$('#cfg-del').value,sec:1,fc:pre.fc||new Date().toISOString(),va:'vl-v1',vd:'v2.1'};
+  mem.cfg={op:op,eq:eq,del:$('#cfg-del').value,sec:1,fc:pre.fc||new Date().toISOString(),va:'vl-v2',vd:'v2.1'};
   persist(); toast('Configuración guardada'); renderLista(); show('scr-lista');
 };
 function hayPrueba(){ return mem.exps.some(function(e){return e.pr;}); }
@@ -520,7 +565,12 @@ $('#btn-nuevo').onclick=function(){ if(needCfg())return; cur=nuevoExp(); curNew=
 /* ====== FICHA ====== */
 function abrirFicha(id){ var e=mem.exps.filter(function(x){return x.id===id;})[0]; if(!e)return;
   cur=JSON.parse(JSON.stringify(e)); curNew=false; renderFicha(); show('scr-ficha'); }
-$('#btn-volver').onclick=function(){ renderLista(); show('scr-lista'); };
+$('#btn-volver').onclick=function(){ intentarSalir(irLista); };
+$('#btn-lista2').onclick=function(){ intentarSalir(irLista); };
+$('#m-volver').onclick=function(){ $('#modal-salir').classList.remove('show'); pendExit=null; };
+$('#m-salir').onclick=function(){ $('#modal-salir').classList.remove('show'); var d=pendExit; pendExit=null; if(d)d(); };
+$('#m-guardar').onclick=function(){ $('#modal-salir').classList.remove('show');
+  var d=pendExit; pendExit=null; if(doGuardar()&&d)d(); };
 $all('#itabs .t').forEach(function(t){ t.onclick=function(){
   $all('#itabs .t').forEach(function(x){x.classList.remove('on');}); t.classList.add('on');
   $all('.bloque').forEach(function(b){b.style.display='none';});
@@ -534,6 +584,7 @@ function renderFicha(){
   setSingle('a-amb',cur.a.amb); setSingle('a-ter',cur.a.ter);
   llenarDeptos(); $('#a-dep').value=cur.a.dep||''; llenarMunis(); $('#a-loc').value=cur.a.loc||'';
   $('#a-vinc').value=cur.a.vinc; $('#a-den').value=cur.a.den;
+  $('#a-viao').value=cur.a.viao||''; $('#a-acto').value=cur.a.acto||''; $('#e-tipoo').value=cur.e.tipoo||'';
   setMulti('a-act',(cur.a.act||'').split('|').filter(Boolean));
   $('#c-fh').value=cur.c.fh; setSingle('c-fr',cur.c.fr); setMulti('c-tv',cur.c.tv);
   setMulti('c-mod',cur.c.mod); setMulti('c-ctx',cur.c.ctx); setSingle('c-sen',cur.c.sen);
@@ -543,7 +594,8 @@ function renderFicha(){
   $('#e-caesq').value=''; $('#e-caesres').classList.remove('show'); pintarCaes();
   setSingle('e-comp',cur.e.comp); setSingle('e-resp',cur.e.resp); $('#e-fr').value=dmy2iso(cur.e.fr);
   $('#f-cla').value=cur.f.cla; setMulti('f-rec',cur.f.rec); $('#f-fres').value=dmy2iso(cur.f.fres); $('#f-nres').value=cur.f.nres;
-  renderPers(); renderHitos(); onFichaChange();
+  renderPers(); renderHitos(); pintarMeta(); onFichaChange();
+  collect(); base=snap();
   $all('#itabs .t').forEach(function(x,i){x.classList.toggle('on',i===0);});
   $all('.bloque').forEach(function(b,i){b.style.display=i===0?'block':'none';});
 }
@@ -659,16 +711,20 @@ $('#e-caesres').addEventListener('click',function(ev){ var it=ev.target.closest(
 /* --- Reactividad y estado --- */
 function collect(){
   cur.id=$('#a-id').value.trim();
-  cur.a={fp:iso2dmy($('#a-fp').value),via:getSingle('a-via'),sind:getSingle('a-sind'),amb:getSingle('a-amb'),
+  cur.a={fp:iso2dmy($('#a-fp').value),via:getSingle('a-via'),viao:$('#a-viao').value.trim(),
+    sind:getSingle('a-sind'),amb:getSingle('a-amb'),
     dep:$('#a-dep').value,loc:$('#a-loc').value,vinc:$('#a-vinc').value.trim(),den:$('#a-den').value,
-    act:getMultiL('a-act').join('|'),ter:getSingle('a-ter')};
+    act:getMultiL('a-act').join('|'),acto:$('#a-acto').value.trim(),ter:getSingle('a-ter')};
+  if(cur.a.via!=='Otra')cur.a.viao='';
+  if(cur.a.act.indexOf('d')<0)cur.a.acto='';
   cur.c={fh:$('#c-fh').value.trim(),fr:getSingle('c-fr'),tv:getMultiL('c-tv'),mod:getMultiL('c-mod'),
     ctx:getMultiL('c-ctx'),sen:getSingle('c-sen'),obs:$('#c-obs').value.trim()};
   var org=cur.e.org; var otro=$('#e-orgotro').value.trim();
   if(/Otro organismo/.test(org)&&otro) org=org.replace(/\(especificar\)/,'— '+otro);
-  cur.e={tipo:getSingle('e-tipo'),jur:getSingle('e-jur'),nat:$('#e-nat').value,org:org,
+  cur.e={tipo:getSingle('e-tipo'),tipoo:$('#e-tipoo').value.trim(),jur:getSingle('e-jur'),nat:$('#e-nat').value,org:org,
     omun:$('#e-mun').value,caes:cur.e.caes,comp:getSingle('e-comp'),resp:getSingle('e-resp'),
     fr:iso2dmy($('#e-fr').value)};
+  if(cur.e.tipo!=='Otro')cur.e.tipoo='';
   if(cur.e.tipo!=='Organismo público'){cur.e.jur='';cur.e.nat='';cur.e.org='';cur.e.omun='';}
   if(cur.e.jur!=='Municipal')cur.e.omun='';
   if(cur.e.resp==='No')cur.e.fr='';
@@ -680,31 +736,38 @@ function onFichaChange(){
   $('#e-munwrap').style.display = cur.e.jur==='Municipal'?'block':'none';
   $('#e-frwrap').style.display = (cur.e.resp==='Sí'||cur.e.resp==='Parcial')?'block':'none';
   $('#c-ctxwrap').style.display = (cur.c.mod.indexOf('c')>=0)?'block':'none';
+  $('#a-viao').style.display = cur.a.via==='Otra'?'block':'none';
+  $('#a-acto').style.display = cur.a.act.indexOf('d')>=0?'block':'none';
+  $('#e-tipoo').style.display = cur.e.tipo==='Otro'?'block':'none';
   var mal=alertaId(cur.c.obs); $('#w-obs').classList.toggle('show',mal);
   if(mal)$('#w-obs').textContent='⚠ Las observaciones parecen contener un dato identificatorio (DNI/CUIL/contacto). No debe registrarse.';
   var st=estado(cur), html='', tot=0;
   ['A','B','C','D','E','F'].forEach(function(k){ tot+=st[k].length;
     var tab=document.querySelector('#itabs .t[data-b="'+k+'"]'); tab.classList.toggle('done',!st[k].length);
-    if(st[k].length) html+='<div><b>'+k+':</b> <span class="falta">falta '+st[k].join(', ')+'</span></div>'; });
-  $('#f-estado').innerHTML = tot? html : '<b style="color:var(--ok)">✔ Reclamo completo según el diccionario v2.1</b>';
+    var bd=tab.querySelector('.bdg'); if(bd){ bd.textContent=st[k].length; bd.classList.toggle('show',st[k].length>0); }
+    if(st[k].length) html+='<div><b>'+TABNOM[k]+':</b> <span class="falta">'+st[k].join(', ')+'</span></div>'; });
+  $('#f-estado').innerHTML = tot? ('<div style="margin-bottom:5px"><b>Campos obligatorios pendientes, por pestaña:</b></div>'+html)
+    : '<b style="color:var(--ok)">✔ Reclamo completo según el diccionario v2.1</b>';
   $('#f-id').textContent = cur.id||'(nuevo reclamo)';
 }
 $('#scr-ficha').addEventListener('input',function(ev){ if(ev.target.closest('#pers')||ev.target.closest('#hitos'))return; onFichaChange(); });
 $('#scr-ficha').addEventListener('change',function(ev){ if(ev.target.closest('#pers')||ev.target.closest('#hitos'))return; onFichaChange(); });
 
-$('#btn-guardar').onclick=function(){
+function doGuardar(){
   collect();
   var pid=parseId(cur.id);
-  if(!pid){toast('Número de expediente inválido (OOOO-CCCC/AAAA)');return;}
+  if(!pid){toast('Número de expediente inválido (OOOO-CCCC/AAAA)');return false;}
   var dup=mem.exps.some(function(e){return e.id===cur.id;});
-  if(curNew&&dup){toast('Ya existe un reclamo con ese número');return;}
+  if(curNew&&dup){toast('Ya existe un reclamo con ese número');return false;}
   var ts=new Date().toISOString(), op=mem.cfg?mem.cfg.op:'';
   if(curNew||!cur.meta.cr){cur.meta.cr=ts;cur.meta.cop=op;}
   cur.meta.mod=ts; cur.meta.mop=op;
   var idx=-1; mem.exps.forEach(function(e,i){if(e.id===cur.id)idx=i;});
   if(idx>=0)mem.exps[idx]=JSON.parse(JSON.stringify(cur)); else mem.exps.push(JSON.parse(JSON.stringify(cur)));
-  curNew=false; persist(); toast('Reclamo guardado'); renderLista();
-};
+  curNew=false; persist(); base=snap(); pintarMeta(); toast('Reclamo guardado'); renderLista();
+  return true;
+}
+$('#btn-guardar').onclick=function(){ doGuardar(); };
 $('#btn-borrar1').onclick=function(){
   if(!confirm('¿Eliminar este reclamo del equipo? Esta acción no puede deshacerse.'))return;
   mem.exps=mem.exps.filter(function(e){return e.id!==cur.id;});
@@ -728,7 +791,7 @@ $('#btn-exp-e').onclick=function(){ bajar(nom('Expedientes'),buildCSV('E',oficia
 $('#btn-exp-p').onclick=function(){ bajar(nom('Personas'),buildCSV('P',oficiales())); toast('CSV de personas descargado'); };
 $('#btn-exp-t').onclick=function(){ bajar(nom('Trayectoria'),buildCSV('T',oficiales())); toast('CSV de trayectoria descargado'); };
 $('#btn-json').onclick=function(){
-  var r={app:'vl-carga',ver:'vl-v1',dicc:'v2.1',fecha:new Date().toISOString(),cfg:mem.cfg,exps:mem.exps};
+  var r={app:'vl-carga',ver:'vl-v2',dicc:'v2.1',fecha:new Date().toISOString(),cfg:mem.cfg,exps:mem.exps};
   bajar('VL_Respaldo_'+((mem.cfg&&mem.cfg.op)||'OP')+'_'+hoy()+'.json',JSON.stringify(r,null,1),'application/json');
   toast('Respaldo JSON descargado');
 };
