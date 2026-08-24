@@ -5,7 +5,7 @@
    (vl-v1 -> vl-v2 -> vl-v3...). Eso obliga a los equipos a descargar la
    versión nueva la próxima vez que tengan conexión. */
 
-var VERSION = 'vl-v3';
+var VERSION = 'vl-v5';
 var ASSETS = [
   './',
   './index.html',
